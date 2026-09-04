@@ -18,13 +18,11 @@ def split_and_validate(input_path: str, train_path: str, val_path: str):
 
     # Save Train
     with open(train_path, "w", encoding="utf-8") as f:
-        for entry in train_data:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        f.writelines(json.dumps(entry, ensure_ascii=False) + "\n" for entry in train_data)
 
     # Save Val
     with open(val_path, "w", encoding="utf-8") as f:
-        for entry in val_data:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        f.writelines(json.dumps(entry, ensure_ascii=False) + "\n" for entry in val_data)
 
     print(f"Split complete: {len(train_data)} Train, {len(val_data)} Val.")
 

@@ -24,10 +24,7 @@ def convert_format(input_path: Path, output_path: Path, max_lines: int = 0):
                     text = record.get("text", "")
 
                     # Extract Input/Response from instruction format
-                    if "### Input:" in text and "### Response:" in text:
-                        fout.write(text + "\n")
-                        count += 1
-                    elif text.strip():
+                    if "### Input:" in text and "### Response:" in text or text.strip():
                         fout.write(text + "\n")
                         count += 1
                     else:

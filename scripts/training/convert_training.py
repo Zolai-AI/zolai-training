@@ -24,7 +24,7 @@ def load_jsonl(path):
 def extract_text(record):
     """Extract text from record."""
     for key in ["text", "zo_tdm", "input", "english", "output"]:
-        if key in record and record[key]:
+        if record.get(key):
             return record[key]
     return ""
 
@@ -143,8 +143,7 @@ def main():
             if converted:
                 output_file = OUTPUT_DIR / f"{src_name}_{fmt_name}.jsonl"
                 with open(output_file, "w", encoding="utf-8") as f:
-                    for item in converted:
-                        f.write(json.dumps(item, ensure_ascii=False) + "\n")
+                    f.writelines(json.dumps(item, ensure_ascii=False) + "\n" for item in converted)
 
                 stats[f"{src_name}_{fmt_name}"] = len(converted)
                 print(f"    -> {output_file.name} ({len(converted)} records)")
@@ -165,8 +164,7 @@ def main():
 
         merged_file = OUTPUT_DIR / "train_merged.jsonl"
         with open(merged_file, "w", encoding="utf-8") as f:
-            for item in merged_records:
-                f.write(json.dumps(item, ensure_ascii=False) + "\n")
+            f.writelines(json.dumps(item, ensure_ascii=False) + "\n" for item in merged_records)
 
         print(f"  train_merged.jsonl: {len(merged_records)} records")
 

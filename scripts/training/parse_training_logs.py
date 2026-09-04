@@ -2,8 +2,8 @@
 """Parse Kaggle training logs and suggest improvements"""
 
 import re
-import json
 from pathlib import Path
+
 
 def parse_logs(log_file):
     """Extract training metrics from logs"""
@@ -17,13 +17,13 @@ def parse_logs(log_file):
     print("=== TRAINING SUMMARY ===\n")
     
     if losses:
-        print(f"Training Loss:")
+        print("Training Loss:")
         print(f"  Start: {losses[0]}")
         print(f"  End: {losses[-1]}")
         print(f"  Improvement: {float(losses[0]) - float(losses[-1]):.4f}")
     
     if eval_losses:
-        print(f"\nValidation Loss:")
+        print("\nValidation Loss:")
         print(f"  Start: {eval_losses[0]}")
         print(f"  End: {eval_losses[-1]}")
     
