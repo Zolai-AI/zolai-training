@@ -12,3 +12,6 @@ artifacts/
 .venv/
 *.jsonl
 !kaggle_dataset/*.json
+
+# Jupyter notebooks — experimental artifacts
+notebooks/
