@@ -22,14 +22,36 @@ jobs:
 
       - name: Check notebooks parse as scripts
         run: |
-          # Convert each .ipynb to script; fail only on hard parse errors.
-          # Cosmetic/environment noise (e.g. missing kernel, widgets) is expected —
-          # those cause warnings but not hard failures. We tolerate non-zero exit
-          # codes from nbconvert when the error is about kernel/widget metadata
-          # (not actual JSON structure corruption), because this CI only verifies
-          # the notebook JSON is structurally valid enough to convert.
+          # Collect tracked .ipynb files from known locations + discovery.
+          # The notebooks/ directory is gitignored (experimental), so we
+          # search kaggle_notebook_upload/ first, then fall back to find.
+          found_notebooks=""
+          if compgen -G "kaggle_notebook_upload/*.ipynb" > /dev/null 2>&1; then
+            found_notebooks=$(find kaggle_notebook_upload -name '*.ipynb')
+          fi
+          # Broader discovery for any tracked .ipynb not in node_modules
+          extra=$(find . -name '*.ipynb' -not -path '*/node_modules/*' \
+                  -not -path './kaggle_notebook_upload/*' 2>/dev/null)
+          notebooks=""
+          if [ -n "$found_notebooks" ] && [ -n "$extra" ]; then
+            notebooks=$(printf '%s\n%s' "$found_notebooks" "$extra")
+          elif [ -n "$found_notebooks" ]; then
+            notebooks="$found_notebooks"
+          elif [ -n "$extra" ]; then
+            notebooks="$extra"
+          fi
+
+          if [ -z "$notebooks" ]; then
+            echo "No .ipynb notebooks found — skipping check."
+            exit 0
+          fi
+
+          count=$(echo "$notebooks" | wc -l)
+          echo "Found $count notebook(s) to check."
+          echo "$notebooks"
+
           failed=0
-          for nb in notebooks/*.ipynb; do
+          for nb in $notebooks; do
             echo "Checking $nb ..."
             if ! jupyter nbconvert --to script --stdout "$nb" > /dev/null 2>&1; then
               # Retry without stderr — if stdout produces output, the notebook
