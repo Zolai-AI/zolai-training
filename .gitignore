@@ -21,3 +21,6 @@ test-results/
 
 # Jupyter notebooks — experimental artifacts
 notebooks/
+
+# Orchestra session-claims runtime artifact
+.pcore-claims/
