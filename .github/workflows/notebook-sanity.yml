@@ -1,0 +1,52 @@
+name: Notebook Sanity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  nbconvert-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install jupyter nbconvert
+
+      - name: Check notebooks parse as scripts
+        run: |
+          # Convert each .ipynb to script; fail only on hard parse errors.
+          # Cosmetic/environment noise (e.g. missing kernel, widgets) is expected —
+          # those cause warnings but not hard failures. We tolerate non-zero exit
+          # codes from nbconvert when the error is about kernel/widget metadata
+          # (not actual JSON structure corruption), because this CI only verifies
+          # the notebook JSON is structurally valid enough to convert.
+          failed=0
+          for nb in notebooks/*.ipynb; do
+            echo "Checking $nb ..."
+            if ! jupyter nbconvert --to script --stdout "$nb" > /dev/null 2>&1; then
+              # Retry without stderr — if stdout produces output, the notebook
+              # structurally parsed fine even though nbconvert warned about
+              # kernel metadata or missing extensions (common in headless CI).
+              if jupyter nbconvert --to script --stdout "$nb" > /dev/null; then
+                echo "  OK (warnings suppressed)"
+              else
+                echo "  HARD FAIL — notebook JSON may be corrupted"
+                failed=$((failed + 1))
+              fi
+            else
+              echo "  OK"
+            fi
+          done
+          if [ "$failed" -gt 0 ]; then
+            echo "$failed notebook(s) failed hard parse"
+            exit 1
+          fi
+          echo "All notebooks OK"
