@@ -1,3 +1,6 @@
-# progress-tracker
+# Progress Tracker
 
-Fill for Zolai Training.
+## 2026-09-04 — Setup baseline
+- Repo connected to `Zolai-AI/zolai-training`.
+- Received `kaggle_dataset/` + `notebooks/` from monorepo distribution.
+- Training strategy: RAG/embeddings-first; fine-tuning only for generation, GGUF export.
