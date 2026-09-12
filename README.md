@@ -1,5 +1,7 @@
 # zolai-training — LoRA/QLoRA fine-tuning + GGUF export
 
+<p align="center"><img src="logo.png" alt="Zolai AI" width="120"></p>
+
 Fine-tuning small Zolai LLMs (0.5B–3B) via PEFT/TRL, adapter merge + GGUF export.
 
 ## What's here
