@@ -1,0 +1,124 @@
+{
+  "_comment": "Abridged example of a real dataset_manifest.json (counts/checksums are from the first full export, 2026-10-26). The real file has one per_source entry per table and one task_counts entry per emitted label.",
+  "schema_version": 1,
+  "generated_at": "2026-10-26T12:00:00Z",
+  "generator": "zolai-training/scripts/export_zolai_dataset.py",
+  "db": {
+    "basename": "zolai.db",
+    "mtime_utc": "2026-10-25T18:52:58Z",
+    "size_bytes": 2396983296
+  },
+  "config": {
+    "seed": 42,
+    "min_len": 3,
+    "max_instruction": 500,
+    "max_input": 2000,
+    "max_output": 2000,
+    "wiki_output_cap": 1500,
+    "min_confidence": 0.9,
+    "eval_per_direction": 400,
+    "max_train_rows": null,
+    "ratio_min": 0.25,
+    "ratio_max": 4.0
+  },
+  "counts": {
+    "train": 294817,
+    "eval": 994,
+    "probes": 52
+  },
+  "per_source": {
+    "corpus_parallel_pairs": {
+      "read": 24029,
+      "emitted": 23118,
+      "dropped": {
+        "length": 0,
+        "control_chars": 0,
+        "zvs": 244,
+        "dedup": 656,
+        "ratio": 0,
+        "confidence": 0,
+        "excluded_direction": 0,
+        "junk_source": 0,
+        "leakage": 11,
+        "heldout": 0,
+        "malformed": 0
+      }
+    },
+    "translations": {
+      "read": 207623,
+      "emitted": 54574,
+      "dropped": {
+        "length": 48,
+        "control_chars": 0,
+        "zvs": 376,
+        "dedup": 0,
+        "ratio": 0,
+        "confidence": 831,
+        "excluded_direction": 150965,
+        "junk_source": 0,
+        "leakage": 29,
+        "heldout": 800,
+        "malformed": 0
+      }
+    },
+    "eval_cases": {
+      "read": 273,
+      "emitted": 254,
+      "dropped": {
+        "length": 3,
+        "control_chars": 0,
+        "zvs": 0,
+        "dedup": 16,
+        "ratio": 0,
+        "confidence": 0,
+        "excluded_direction": 0,
+        "junk_source": 0,
+        "leakage": 0,
+        "heldout": 0,
+        "malformed": 0
+      }
+    },
+    "translations_heldout": {
+      "read": 55827,
+      "emitted": 792,
+      "dropped": {
+        "length": 0,
+        "control_chars": 0,
+        "zvs": 8,
+        "dedup": 0,
+        "ratio": 0,
+        "confidence": 0,
+        "excluded_direction": 0,
+        "junk_source": 0,
+        "leakage": 0,
+        "heldout": 0,
+        "malformed": 0
+      }
+    },
+    "...": "one entry per source table (see docs/sft-dataset-export.md; per_source accounting reconciles as read == emitted + sum(dropped), except translations_heldout whose non-sampled rows continue into the train stream)"
+  },
+  "task_counts": {
+    "error_correction": 8925,
+    "eval_correction": 9,
+    "eval_gloss": 102,
+    "eval_qa": 50,
+    "eval_translation": 41,
+    "eval_zvs_probe": 52,
+    "exercise_negation": 23245,
+    "lexical_gloss_en_zo": 25058,
+    "lexical_gloss_zo_en": 91834,
+    "proverb_translation": 7565,
+    "proverb_translation_rev": 7601,
+    "translation_en_zo": 27250,
+    "translation_zo_en": 51234,
+    "wiki_vocabulary": 1395,
+    "word_gloss": 166,
+    "...": "one entry per emitted task label (incl. {task}:{pattern} composites)"
+  },
+  "directions_excluded": ["en→my"],
+  "checksums": {
+    "train.jsonl": "sha256:1aa5b3c17830d1c8a20dc582838e8cd293790c0cd7b73e54412a122eb4bbb3ef",
+    "eval.jsonl": "sha256:176889bd1b42225e520e023117526fca877c923c03f0d5cdaa5758bc5520faf9",
+    "eval_probes.jsonl": "sha256:494636af6ebeb2256b38b41785284a148dc7b70fd0c6f095ed4890953a5528ab"
+  }
+}
