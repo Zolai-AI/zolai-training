@@ -52,3 +52,8 @@ manifest version, RAG feed). See `README.md` > Connect.
 
 - Secrets come only from env/`.env`; `.env.example` has placeholders only.
 - Never hardcode API keys, HF tokens, or provider keys in code/docs/wiki/scripts.
+
+## Secret Hygiene (repo-specific)
+
+- Gemini-ensemble scripts and notebooks must read keys from env/Colab secrets, never a cell literal; scrub saved cell outputs (Run All before commit) so no key survives in `.ipynb` JSON.
+- Canonical rules: workspace-root `AGENTS.md` § Secret Hygiene. Full procedure: `../context/code-standards.md` § Secret Hygiene — Prevention. Staged-change scan gate: `secret-scan` subagent; checklist: `secret-hygiene` skill. Do not duplicate that block here.
