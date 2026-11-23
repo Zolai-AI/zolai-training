@@ -1,0 +1,42 @@
+project:
+  name: zolai-training
+  slug: zolai-training
+  display_name: zolai-training
+  type: ai
+  category: ai-platform
+  owner: Zolai-AI
+
+  description: >
+    LoRA/QLoRA fine-tuning and GGUF export.
+
+version:
+  current: 0.1.0
+  channel: dev
+  release_name: genesis
+  build_number: 001
+
+lifecycle:
+  stage: development
+  status: active
+  started: 2024-01-01
+  updated: 2026-11-23
+
+repository:
+  url: git@github.com:Zolai-AI/zolai-training.git
+  branch: main
+  provider: github
+  visibility: public
+
+stack:
+  languages:
+    - python
+  frameworks:
+    - pytorch
+  package_manager: uv
+  runtime: python
+
+ai:
+  assistant: cursor
+  context_dir: context/
+  entry_point: AGENTS.md
+  rules: []
