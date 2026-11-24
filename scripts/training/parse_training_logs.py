@@ -2,7 +2,25 @@
 """Parse Kaggle training logs and suggest improvements"""
 
 import re
+import os
 from pathlib import Path
+def _data_root() -> Path:
+    """Shared workspace ``data/`` dir, matching the workspace Data Layer Standard.
+
+    The old default was an absolute path in a *different* project
+    (``Projects/zolai``, not ``Projects/zolai-ai``), so it resolved for nobody.
+    Resolution order: ``ZOLAI_DATA_ROOT``, then the repo's own ``data/`` if it
+    holds training files, then the workspace ``data/`` beside this repo.
+    """
+    env = os.environ.get("ZOLAI_DATA_ROOT", "").strip()
+    if env:
+        return Path(env).expanduser()
+    repo_root = Path(__file__).resolve().parents[2]
+    local = repo_root / "data" / "training"
+    if local.is_dir():
+        return repo_root / "data"
+    return Path(__file__).resolve().parents[3] / "data"
+
 
 
 def parse_logs(log_file):
@@ -48,7 +66,10 @@ def parse_logs(log_file):
         print("✓ GPU training confirmed")
 
 if __name__ == "__main__":
-    log_file = Path("/home/peter/Documents/Projects/zolai/training_test.log")
+    # Old default was an absolute home path in a different project; resolve from
+    # the workspace instead, with an env override.
+    log_file = Path(os.environ.get("ZOLAI_TRAINING_LOG")
+                    or _data_root().parent / "training_test.log")
     if log_file.exists():
         parse_logs(log_file)
     else:

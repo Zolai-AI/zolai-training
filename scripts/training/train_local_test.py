@@ -2,6 +2,7 @@
 """Local training test - mimics Kaggle notebook"""
 
 import json
+from pathlib import Path
 import os
 
 import torch
@@ -25,8 +26,28 @@ BATCH_SIZE = 8
 MAX_LENGTH = 256
 
 # Load datasets
-TRAIN_FILE = "/home/peter/Documents/Projects/zolai/data/training/llm_train.jsonl"
-VAL_FILE = "/home/peter/Documents/Projects/zolai/data/training/llm_val.jsonl"
+def _data_root() -> Path:
+    """Shared workspace ``data/`` dir, matching the workspace Data Layer Standard.
+
+    The old default was an absolute path in a *different* project
+    (``Projects/zolai``, not ``Projects/zolai-ai``), so it resolved for nobody.
+    Resolution order: ``ZOLAI_DATA_ROOT``, then the repo's own ``data/`` if it
+    holds training files, then the workspace ``data/`` beside this repo.
+    """
+    env = os.environ.get("ZOLAI_DATA_ROOT", "").strip()
+    if env:
+        return Path(env).expanduser()
+    repo_root = Path(__file__).resolve().parents[2]
+    local = repo_root / "data" / "training"
+    if local.is_dir():
+        return repo_root / "data"
+    return Path(__file__).resolve().parents[3] / "data"
+
+
+_DATA_ROOT = _data_root()
+_TRAIN_DIR = _DATA_ROOT / "training"
+TRAIN_FILE = str(os.environ.get("ZOLAI_TRAIN_FILE") or _TRAIN_DIR / "llm_train.jsonl")
+VAL_FILE = str(os.environ.get("ZOLAI_VAL_FILE") or _TRAIN_DIR / "llm_val.jsonl")
 
 def load_dataset(filepath, max_samples=10000):
     texts = []
