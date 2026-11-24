@@ -1,4 +1,6 @@
 # zolai-training — LoRA/QLoRA fine-tuning + GGUF export
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-blue.svg)
 
 <p align="center"><img src="logo.png" alt="Zolai AI" width="120"></p>
 
